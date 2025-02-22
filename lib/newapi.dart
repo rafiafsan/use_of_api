@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 class apiclass extends StatefulWidget {
   const apiclass({super.key});
 
@@ -22,7 +23,7 @@ class _apiclassState extends State<apiclass> {
     final response =await http.get(Uri.parse("https://jsonplaceholder.typicode.com/users"));
 
     setState(() {
-      isloading = false;
+      isloading =false;
     });
 
     print(response.statusCode);
@@ -46,9 +47,7 @@ class _apiclassState extends State<apiclass> {
       appBar: AppBar(
         title: Text('User List',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
       ),
-      body: isloading ? Center(
-        child: CircularProgressIndicator(),
-      ): ListView.builder(
+      body: isloading ? ShimmerListTile(): ListView.builder(
         itemCount:users.length,
           itemBuilder: (context, index){
             final user = users[index];
@@ -77,6 +76,56 @@ class _apiclassState extends State<apiclass> {
           );
           }
       )
+    );
+  }
+}
+
+
+class ShimmerListTile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Card(
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.grey[300],
+              radius: 25,
+            ),
+            title: Container(
+              width: double.infinity,
+              height: 16,
+              color: Colors.grey[300],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 4),
+                Container(
+                  width: 200,
+                  height: 12,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 4),
+                Container(
+                  width: 150,
+                  height: 12,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 4),
+                Container(
+                  width: 120,
+                  height: 12,
+                  color: Colors.grey[300],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
